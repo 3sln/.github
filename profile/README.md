@@ -25,7 +25,7 @@ Software that pays for itself, so that it keeps existing.
 
 | | | |
 |---|---|---|
-| **[Storia](https://storia.3sln.com)** | Self-hosted audiobook player and hosting. Authors host their own audiobooks — no Audible, no gatekeepers. Every publication gets its own URL, its own installable PWA, and a service worker so the player works offline. Listeners can always download. | [storia.3sln.com](https://storia.3sln.com) |
+| **[Storia](https://storia.3sln.com)** | Audiobook hosting for independent authors — publish without going through Audible. Every publication gets its own URL, its own installable PWA, and a service worker so the player works offline. Listeners can always download. | [storia.3sln.com](https://storia.3sln.com) |
 | **Construe** | A deterministic natural-language → structured-constraint transform. A person types a sentence; you get a constraint object back. No model runs in the request path — parsing is deterministic code, evolved offline behind gates. | *coming soon* |
 
 ## Free software
