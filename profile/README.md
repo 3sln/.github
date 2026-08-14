@@ -7,7 +7,7 @@
 
 <p align="center">
   <strong>A small software lab.</strong><br>
-  Minimal libraries, self-hostable products, and tools that outlive their dependencies.
+  Minimal libraries, independent products, and tools built to outlive their dependencies.
 </p>
 
 ---
