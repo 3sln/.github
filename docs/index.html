@@ -1,0 +1,332 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>3sln — a small software lab</title>
+<meta name="description" content="A small software lab. Minimal libraries, self-hostable products, and tools built to outlive their dependencies.">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<meta property="og:title" content="3sln — a small software lab">
+<meta property="og:description" content="Minimal libraries, self-hostable products, and tools that outlive their dependencies.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://3sln.com">
+<style>
+/* Design tokens are the ones the products already use, so the site and the
+   apps read as one thing. */
+:root {
+  color-scheme: dark light;
+  --bg: #0f172a;
+  --bg-glow: #131f3d;
+  --surface: rgba(30, 41, 59, .55);
+  --surface-hover: rgba(30, 41, 59, .9);
+  --text: #f8fafc;
+  --text-dim: #94a3b8;
+  --text-mute: #7b8ba1;
+  --primary: #3b82f6;
+  --primary-bright: #60a5fa;
+  --btn: #2563eb;
+  --tag-soon: #a78bfa;
+  --tag-free: #34d399;
+  --accent: #8b5cf6;
+  --sky: #38bdf8;
+  --border: rgba(255, 255, 255, .1);
+  --border-strong: rgba(255, 255, 255, .18);
+  --radius: 1rem;
+  --radius-sm: .5rem;
+  --measure: 44rem;
+  --page: 68rem;
+  --font: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  --mono: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: light) {
+  :root {
+    --bg: #f8fafc;
+    --bg-glow: #e8eefc;
+    --surface: rgba(255, 255, 255, .75);
+    --surface-hover: #fff;
+    --text: #0f172a;
+    --text-dim: #475569;
+    --text-mute: #64748b;
+    --border: rgba(15, 23, 42, .1);
+    --border-strong: rgba(15, 23, 42, .18);
+    /* the dark-mode accent is far too light on this ground */
+    --primary-bright: #1d4ed8;
+    --tag-soon: #6d28d9;
+    --tag-free: #047857;
+  }
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+body {
+  margin: 0;
+  font-family: var(--font);
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+}
+/* one soft light source behind the hero, nothing more */
+body::before {
+  content: '';
+  position: fixed;
+  inset: -30vh 0 auto;
+  height: 80vh;
+  background: radial-gradient(60% 55% at 50% 0%, var(--bg-glow) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: -1;
+}
+a { color: inherit; }
+h1, h2, h3 { line-height: 1.2; letter-spacing: -.02em; margin: 0; }
+
+.wrap { width: 100%; max-width: var(--page); margin-inline: auto; padding-inline: 1.5rem; }
+
+header {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 1rem; padding-block: 1.25rem;
+}
+header .logo { display: flex; align-items: center; color: var(--text); padding-block: .5rem; }
+header .logo svg, header .logo img { height: 1.75rem; width: auto; display: block; }
+nav { display: flex; gap: 1.5rem; font-size: .9rem; font-weight: 500; }
+/* padding-block, not height: it keeps the links on a comfortable touch target
+   (~44px) without changing where the text sits */
+nav a { color: var(--text-dim); text-decoration: none; transition: color .15s; padding-block: .6rem; }
+nav a:hover { color: var(--text); }
+@media (max-width: 34rem) { nav .opt { display: none; } }
+/* below this the logo and the links stop fitting on one line, so the nav takes
+   a row of its own rather than pushing the last link off the screen */
+@media (max-width: 26rem) {
+  header { flex-wrap: wrap; gap: .25rem; }
+  nav { width: 100%; gap: 1.25rem; }
+}
+
+.hero { padding-block: clamp(3rem, 11vw, 7rem) clamp(2.5rem, 8vw, 5rem); max-width: var(--measure); }
+.hero h1 { font-size: clamp(2.25rem, 7vw, 3.75rem); font-weight: 700; }
+.hero h1 .grad {
+  background: linear-gradient(100deg, var(--sky), var(--primary) 45%, var(--accent));
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+}
+.hero p { font-size: clamp(1.05rem, 2.4vw, 1.25rem); color: var(--text-dim); margin: 1.25rem 0 0; }
+.hero .actions { display: flex; flex-wrap: wrap; gap: .75rem; margin-top: 2rem; }
+.btn {
+  display: inline-flex; align-items: center; gap: .5rem;
+  padding: .65rem 1.15rem; border-radius: var(--radius-sm);
+  font-size: .95rem; font-weight: 600; text-decoration: none;
+  border: 1px solid var(--border-strong); transition: background .15s, border-color .15s, transform .15s;
+}
+.btn:hover { transform: translateY(-1px); }
+.btn-primary { background: var(--btn); border-color: var(--btn); color: #fff; }
+.btn-primary:hover { background: var(--primary); border-color: var(--primary); }
+.btn-ghost { background: var(--surface); }
+.btn-ghost:hover { background: var(--surface-hover); }
+
+section { padding-block: clamp(2.5rem, 7vw, 4.5rem); }
+.section-head { max-width: var(--measure); margin-bottom: 2rem; }
+.eyebrow {
+  font-size: .75rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
+  color: var(--primary-bright); margin: 0 0 .6rem;
+}
+.section-head h2 { font-size: clamp(1.5rem, 4vw, 2rem); font-weight: 700; }
+.section-head p { color: var(--text-dim); margin: .6rem 0 0; }
+
+.grid { display: grid; gap: 1rem; }
+.grid.two { grid-template-columns: repeat(auto-fit, minmax(min(100%, 20rem), 1fr)); }
+.grid.three { grid-template-columns: repeat(auto-fill, minmax(min(100%, 16rem), 1fr)); }
+
+.card {
+  position: relative; display: flex; flex-direction: column;
+  padding: 1.5rem; border: 1px solid var(--border); border-radius: var(--radius);
+  background: var(--surface); text-decoration: none;
+  transition: border-color .15s, background .15s, transform .15s;
+}
+a.card:hover { border-color: var(--border-strong); background: var(--surface-hover); transform: translateY(-2px); }
+.card h3 { font-size: 1.15rem; font-weight: 650; display: flex; align-items: center; gap: .6rem; }
+.card p { color: var(--text-dim); font-size: .95rem; margin: .6rem 0 0; }
+.card .link { margin-top: auto; padding-top: 1rem; font-size: .875rem; font-weight: 600; color: var(--primary-bright); }
+code { font-family: var(--mono); font-size: .9em; padding: .1em .35em; border-radius: .3rem;
+  background: color-mix(in srgb, var(--text) 8%, transparent); }
+.card.lib h3 { font-family: var(--mono); font-size: 1rem; letter-spacing: -.01em; }
+
+.tag {
+  font-size: .7rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase;
+  padding: .2rem .5rem; border-radius: 999px;
+  border: 1px solid var(--border-strong); color: var(--text-mute);
+}
+.tag.soon { color: var(--tag-soon); border-color: color-mix(in srgb, var(--tag-soon) 45%, transparent); }
+.tag.free { color: var(--tag-free); border-color: color-mix(in srgb, var(--tag-free) 45%, transparent); }
+
+.principles { display: grid; gap: 1.75rem 2.5rem; grid-template-columns: repeat(auto-fit, minmax(min(100%, 17rem), 1fr)); }
+.principles h3 { font-size: 1rem; font-weight: 650; }
+.principles h3::before { content: ''; display: block; width: 2rem; height: 2px; margin-bottom: .85rem;
+  background: linear-gradient(90deg, var(--sky), var(--accent)); border-radius: 2px; }
+.principles p { color: var(--text-dim); font-size: .95rem; margin: .5rem 0 0; }
+
+footer { border-top: 1px solid var(--border); margin-top: 2rem; padding-block: 2.5rem 3.5rem; }
+.footer-inner { display: flex; flex-wrap: wrap; gap: 1rem 2rem; align-items: center; justify-content: space-between; }
+footer p { margin: 0; color: var(--text-mute); font-size: .875rem; }
+footer nav a { font-size: .875rem; }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  * { transition: none !important; }
+}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header>
+    <a class="logo" href="/" aria-label="3sln — home">
+      <svg height="30" xmlns="http://www.w3.org/2000/svg" viewBox="-4 -4 555.0 208.0" role="img" aria-label="3sln">
+<defs><linearGradient id="hdr" x1="0" y1="0" x2=".35" y2="1"><stop offset="0" stop-color="#38BDF8"/><stop offset=".5" stop-color="#3B82F6"/><stop offset="1" stop-color="#8B5CF6"/></linearGradient></defs>
+<path d="M0 20L85.6 20C149.7 20 138 34.1 138 60.8C138 93.8 105.5 98.5 52.4 98.5C114 98.5 138 106.4 138 136.2C138 167.6 99.4 177 0 177" fill="none" stroke="url(#hdr)" stroke-width="40" stroke-linecap="butt" stroke-linejoin="round"/>
+<path fill="currentColor" d="M237.54 200.04Q220.48 200.04 207.39 195.15Q194.3 190.26 185.91 180.87Q177.51 171.48 175 158.13L207.13 152.05Q210.17 163.02 217.9 168.38Q225.64 173.73 238.2 173.73Q250.89 173.73 258.36 168.64Q265.83 163.55 265.83 156.01Q265.83 149.67 260.94 145.5Q256.05 141.34 245.87 139.09L220.61 133.67Q199.72 129.17 189.41 118.86Q179.1 108.55 179.1 92.29Q179.1 78.54 186.63 68.49Q194.17 58.44 207.59 52.89Q221.01 47.33 238.73 47.33Q255.52 47.33 267.62 52.09Q279.71 56.85 287.18 65.38Q294.65 73.91 297.56 85.41L266.89 91.49Q264.38 83.69 257.77 78.34Q251.16 72.98 239.12 72.98Q228.15 72.98 220.81 77.81Q213.47 82.63 213.47 90.17Q213.47 96.65 218.37 100.88Q223.26 105.11 234.5 107.49L259.62 112.78Q280.64 117.27 290.82 127.19Q301 137.11 301 152.71Q301 166.72 292.94 177.37Q284.87 188.01 270.53 194.03Q256.18 200.04 237.54 200.04ZM373.03 0L373.03 197L338.65 197L338.65 0L373.03 0ZM452.2 110.4L452.2 197L417.82 197L417.82 49.18L450.34 49.18L450.87 85.68L448.1 85.68Q454.31 66.5 466.34 56.92Q478.37 47.33 496.49 47.33Q511.69 47.33 523.06 53.81Q534.43 60.29 540.71 72.72Q546.99 85.15 546.99 103L546.99 197L512.62 197L512.62 108.28Q512.62 93.48 504.95 85.01Q497.28 76.55 483.79 76.55Q474.67 76.55 467.53 80.52Q460.39 84.49 456.29 92.09Q452.2 99.69 452.2 110.4Z"/>
+</svg>
+    </a>
+    <nav>
+      <a href="#products">Products</a>
+      <a href="#free" class="opt">Free</a>
+      <a href="#open-source">Open source</a>
+      <a href="https://github.com/3sln">GitHub</a>
+    </nav>
+  </header>
+
+  <div class="hero">
+    <h1>A small software lab that <span class="grad">owns its own substrate</span>.</h1>
+    <p>
+      Minimal libraries, self-hostable products, and tools built to outlive their
+      dependencies. Bootstrapped and independent — no investors, and nothing that stops
+      working when a funding round doesn't land.
+    </p>
+    <div class="actions">
+      <a class="btn btn-primary" href="#products">See the products</a>
+      <a class="btn btn-ghost" href="https://github.com/3sln">Browse the source</a>
+    </div>
+  </div>
+
+  <section id="products">
+    <div class="section-head">
+      <p class="eyebrow">Products</p>
+      <h2>Software that pays for itself</h2>
+      <p>So that it keeps existing. Priced to be sustainable, not to be acquired.</p>
+    </div>
+    <div class="grid two">
+      <a class="card" href="https://storia.3sln.com">
+        <h3>Storia</h3>
+        <p>
+          Self-hosted audiobook player and hosting. Authors host their own audiobooks — no
+          Audible, no gatekeepers. Every publication gets its own URL, its own installable
+          PWA, and a service worker so the player works offline. Listeners can always download.
+        </p>
+        <span class="link">storia.3sln.com&nbsp;→</span>
+      </a>
+      <div class="card">
+        <h3>Construe <span class="tag soon">Coming soon</span></h3>
+        <p>
+          A deterministic natural-language → structured-constraint transform. A person types
+          a sentence; you get a constraint object back. No model runs in the request path —
+          parsing is deterministic code, evolved offline behind gates that diff every
+          candidate against the incumbent.
+        </p>
+        <span class="link" style="color: var(--text-mute)">In development</span>
+      </div>
+    </div>
+  </section>
+
+  <section id="free">
+    <div class="section-head">
+      <p class="eyebrow">Free software</p>
+      <h2>Built because it should exist</h2>
+      <p>No accounts to upsell, no telemetry, no price.</p>
+    </div>
+    <div class="grid two">
+      <a class="card" href="https://donki.3sln.com">
+        <h3>Donki <span class="tag free">Free</span></h3>
+        <p>
+          Local-first spaced-repetition flashcards. Markdown cards, built-in text to speech,
+          portable <code>.donki</code> decks — and everything you study stays on your device.
+        </p>
+        <span class="link">donki.3sln.com&nbsp;→</span>
+      </a>
+      <a class="card" href="https://bridle.3sln.com">
+        <h3>Bridle <span class="tag free">Free</span></h3>
+        <p>
+          Tether an AI agent CLI running on your desktop to your phone, over WebRTC, with
+          voice and chat. Speech is transcribed on-device and only text crosses the wire —
+          the backend does signalling and nothing else, so there are no API keys anywhere.
+        </p>
+        <span class="link">bridle.3sln.com&nbsp;→</span>
+      </a>
+    </div>
+  </section>
+
+  <section id="open-source">
+    <div class="section-head">
+      <p class="eyebrow">Open source</p>
+      <h2>The substrate</h2>
+      <p>
+        Small, dependency-light libraries — the foundation the products are built on, open
+        because they are more useful shared than hoarded. All MIT licensed.
+      </p>
+    </div>
+    <div class="grid three">
+      <a class="card lib" href="https://github.com/3sln/dodo"><h3>dodo</h3><p>A minimal, configurable virtual DOM — with its own reactive cells.</p></a>
+      <a class="card lib" href="https://github.com/3sln/ngin"><h3>ngin</h3><p>State management by dependency injection: providers, actions, and queries.</p></a>
+      <a class="card lib" href="https://github.com/3sln/deck"><h3>deck</h3><p>Zero-config, Markdown-based component playgrounds and documentation sites.</p></a>
+      <a class="card lib" href="https://github.com/3sln/trove"><h3>trove</h3><p>A self-hostable Google Drive, with semantic search and pluggable storage.</p></a>
+      <a class="card lib" href="https://github.com/3sln/bridle"><h3>bridle</h3><p>Tether an AI agent CLI on your desktop to your phone, over WebRTC.</p></a>
+      <a class="card lib" href="https://github.com/3sln/bab"><h3>bab</h3><p>A small, pluggable localization library. The source text is the key.</p></a>
+      <a class="card lib" href="https://github.com/3sln/cerp"><h3>cerp</h3><p>A CustomElementRegistry proxy: hot reloading and delayed disconnects.</p></a>
+      <a class="card lib" href="https://github.com/3sln/js-tools"><h3>js-tools</h3><p>A builder and dev server for apps that ship unbundled ES modules.</p></a>
+      <a class="card lib" href="https://github.com/3sln/stack"><h3>stack</h3><p>How the pieces fit together — architecture and conventions.</p></a>
+    </div>
+  </section>
+
+  <section id="approach">
+    <div class="section-head">
+      <p class="eyebrow">Approach</p>
+      <h2>How things get built</h2>
+    </div>
+    <div class="principles">
+      <div>
+        <h3>Own the substrate</h3>
+        <p>The products are built on libraries written here, so a breaking change upstream is never somebody else's decision to make.</p>
+      </div>
+      <div>
+        <h3>Few dependencies, chosen slowly</h3>
+        <p>Every dependency is a promise someone else has to keep. Most of these libraries have none at all.</p>
+      </div>
+      <div>
+        <h3>Platform-independent by construction</h3>
+        <p>External capabilities are wrapped behind interfaces with a real implementation and a mock, so nothing is welded to one vendor.</p>
+      </div>
+      <div>
+        <h3>Self-hostable where it matters</h3>
+        <p>If your data lives in it, you should be able to run it — on your own hardware, with your own storage.</p>
+      </div>
+      <div>
+        <h3>Documentation is part of the work</h3>
+        <p>Not a thing that happens afterwards. Every library ships a deck of live, runnable examples.</p>
+      </div>
+      <div>
+        <h3>Built to outlive its dependencies</h3>
+        <p>Plain ES modules, web standards, and as little between the source and the browser as possible.</p>
+      </div>
+    </div>
+  </section>
+</div>
+
+<footer>
+  <div class="wrap footer-inner">
+    <p>© <span id="year">2026</span> Stubbs Software Solutions LLC — trading as 3sln.</p>
+    <nav>
+      <a href="https://github.com/3sln">GitHub</a>
+      <a href="mailto:contact@3sln.com">Contact</a>
+    </nav>
+  </div>
+</footer>
+
+<script>document.getElementById('year').textContent = new Date().getFullYear();</script>
+</body>
+</html>

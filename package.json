@@ -1,0 +1,13 @@
+{
+  "name": "3sln-github",
+  "version": "1.0.0",
+  "type": "module",
+  "private": true,
+  "description": "Org-level assets for 3sln: the profile README, the landing page, and the logo.",
+  "scripts": {
+    "dev": "web-dev-server --config web-dev-server.config.js"
+  },
+  "devDependencies": {
+    "@web/dev-server": "^0.4.6"
+  }
+}
