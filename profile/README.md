@@ -23,10 +23,33 @@ built from, and they are open source because they are more useful shared than ho
 
 Software that pays for itself, so that it keeps existing.
 
-| | | |
-|---|---|---|
-| **[Storia](https://storia.3sln.com)** | Audiobook hosting for independent authors — publish without going through Audible. Every publication gets its own URL, its own installable PWA, and a service worker so the player works offline. Listeners can always download. | [storia.3sln.com](https://storia.3sln.com) |
-| **Construe** | A deterministic natural-language → structured-constraint transform. A person types a sentence; you get a constraint object back. No model runs in the request path — parsing is deterministic code, evolved offline behind gates. | *coming soon* |
+### [Storia](https://storia.3sln.com) — audiobook hosting for independent authors
+
+One flat fee, hosted for ten years, and **we take no cut** of anything you sell.
+
+- **Your sales stay yours.** They run through your own payment processor; we never sit in
+  the middle of them.
+- **A real home for each book.** Every publication gets its own URL, its own installable
+  PWA, and a service worker — so the player works offline, and listeners can always download.
+- **The directory is optional.** List in the shared directory to be found, or stay unlisted
+  and just use the link.
+
+→ [storia.3sln.com](https://storia.3sln.com)
+
+### Construe — evolutionary code *(coming soon)*
+
+LLMs evolve the corner-case-heavy code that is miserable to maintain by hand, training on
+real data so it keeps adapting as traffic patterns shift. No model runs in the request
+path — what ships is ordinary deterministic code, promoted only when it beats the incumbent.
+
+- **Search workflows** evolve an interpreter that turns a natural-language prompt into a
+  constraints object.
+- **Ingestion workflows** evolve an interpreter over a semantic document tree, parsing
+  fields and data into structured form.
+- **Workflows can be public.** Trained on shared data, so an evolutionary breakthrough is
+  one everybody inherits.
+- **Take the artifacts with you.** Paid plans download the evolved code to run entirely on
+  your own systems — sandboxed, as it should be.
 
 ## Free software
 

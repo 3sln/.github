@@ -144,6 +144,11 @@ a.card:hover { border-color: var(--border-strong); background: var(--surface-hov
 .card h3 { font-size: 1.15rem; font-weight: 650; display: flex; align-items: center; gap: .6rem; }
 .card p { color: var(--text-dim); font-size: .95rem; margin: .6rem 0 0; }
 .card .link { margin-top: auto; padding-top: 1rem; font-size: .875rem; font-weight: 600; color: var(--primary-bright); }
+.facts { margin: 1rem 0 0; padding: 0; list-style: none; display: grid; gap: .5rem; }
+.facts li { color: var(--text-dim); font-size: .95rem; padding-left: .9rem; position: relative; }
+.facts li::before { content: ''; position: absolute; left: 0; top: .62em; width: .35rem; height: .35rem;
+  border-radius: 50%; background: linear-gradient(135deg, var(--sky), var(--accent)); }
+.facts strong { color: var(--text); font-weight: 650; }
 code { font-family: var(--mono); font-size: .9em; padding: .1em .35em; border-radius: .3rem;
   background: color-mix(in srgb, var(--text) 8%, transparent); }
 .card.lib h3 { font-family: var(--mono); font-size: 1rem; letter-spacing: -.01em; }
@@ -215,20 +220,30 @@ footer nav a { font-size: .875rem; }
       <a class="card" href="https://storia.3sln.com">
         <h3>Storia</h3>
         <p>
-          Audiobook hosting for independent authors — publish without going through Audible.
-          Every publication gets its own URL, its own installable PWA, and a service worker
-          so the player works offline. Listeners can always download.
+          Audiobook hosting for independent authors. One flat fee, hosted for ten years —
+          and we take no cut of anything you sell.
         </p>
+        <ul class="facts">
+          <li><strong>Your sales stay yours.</strong> They run through your own payment processor; we never sit in the middle of them.</li>
+          <li><strong>A real home for each book.</strong> Every publication gets its own URL, its own installable PWA, and a service worker, so the player works offline and listeners can always download.</li>
+          <li><strong>The directory is optional.</strong> List in the shared directory to be found, or stay unlisted and just use the link.</li>
+        </ul>
         <span class="link">storia.3sln.com&nbsp;→</span>
       </a>
       <div class="card">
         <h3>Construe <span class="tag soon">Coming soon</span></h3>
         <p>
-          A deterministic natural-language → structured-constraint transform. A person types
-          a sentence; you get a constraint object back. No model runs in the request path —
-          parsing is deterministic code, evolved offline behind gates that diff every
-          candidate against the incumbent.
+          An evolutionary code platform. LLMs evolve the corner-case-heavy code that is
+          miserable to maintain by hand, training on real data so it keeps adapting as
+          traffic patterns shift. No model runs in the request path — what ships is
+          ordinary deterministic code, promoted only when it beats the incumbent.
         </p>
+        <ul class="facts">
+          <li><strong>Search workflows</strong> evolve an interpreter that turns a natural-language prompt into a constraints object.</li>
+          <li><strong>Ingestion workflows</strong> evolve an interpreter over a semantic document tree, parsing fields and data into structured form.</li>
+          <li><strong>Workflows can be public.</strong> Trained on shared data, so an evolutionary breakthrough is one everybody inherits.</li>
+          <li><strong>Take the artifacts with you.</strong> Paid plans download the evolved code to run entirely on your own systems — sandboxed, as it should be.</li>
+        </ul>
         <span class="link" style="color: var(--text-mute)">In development</span>
       </div>
     </div>
