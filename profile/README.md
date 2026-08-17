@@ -25,12 +25,15 @@ Software that pays for itself, so that it keeps existing.
 
 ### [Storia](https://storia.3sln.com) — audiobook hosting for independent authors
 
-One flat fee, hosted for ten years, and **we take no cut** of anything you sell.
+One flat fee, hosted for ten years — whether you sell the book or give it away, and
+**we take no cut** either way.
 
-- **Your sales stay yours.** They run through your own payment processor; we never sit in
-  the middle of them.
-- **A real home for each book.** Every publication gets its own URL, its own installable
-  PWA, and a service worker — so the player works offline, and listeners can always download.
+- **Sell it, or don't.** A book can be free and open to anyone, with no paywall at all.
+  When you do sell, it goes through your own payment processor — we never sit in the
+  middle of it.
+- **A real home for each book.** Its own link, to put anywhere you already send people.
+  Listeners just open it — no app store, no account — and it keeps playing with no signal,
+  on a flight or underground. They can always download a copy to keep.
 - **The directory is optional.** List in the shared directory to be found, or stay unlisted
   and just use the link.
 
